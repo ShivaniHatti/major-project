@@ -1,0 +1,1 @@
+"""TODO: normalize source records to a common event schema."""\n

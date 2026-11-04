@@ -1,0 +1,1 @@
+Put synthetic or authorized sample logs here. Do not commit sensitive production logs.\n
