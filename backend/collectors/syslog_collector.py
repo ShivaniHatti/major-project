@@ -1,1 +1,1 @@
-"""TODO: Syslog adapter for authorized network devices."""\n
+"""TODO: Syslog adapter for authorized network devices."""

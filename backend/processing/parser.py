@@ -1,1 +1,1 @@
-"""TODO: parse supported raw log formats."""\n
+"""TODO: parse supported raw log formats."""

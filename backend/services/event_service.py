@@ -5,6 +5,23 @@ from models import SecurityEvent
 from processing.normalizer import normalize_event
 
 
+def _parse_iso_datetime(value):
+    for fmt in (
+        "%Y-%m-%dT%H:%M:%S.%f%z",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%d %H:%M:%S.%f%z",
+        "%Y-%m-%d %H:%M:%S%z",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M:%S",
+    ):
+        try:
+            return datetime.strptime(value, fmt)
+        except ValueError:
+            pass
+    return None
+
+
 def _coerce_event_time(value):
     if value is None:
         return datetime.now(timezone.utc)
@@ -13,13 +30,12 @@ def _coerce_event_time(value):
             return value.replace(tzinfo=timezone.utc)
         return value
     if isinstance(value, str):
-        try:
-            parsed = datetime.fromisoformat(value)
+        parsed = _parse_iso_datetime(value)
+        if parsed is not None:
             if parsed.tzinfo is None:
                 return parsed.replace(tzinfo=timezone.utc)
             return parsed
-        except ValueError:
-            return datetime.now(timezone.utc)
+        return datetime.now(timezone.utc)
     return datetime.now(timezone.utc)
 
 

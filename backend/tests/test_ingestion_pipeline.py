@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from tests import TEST_DATABASE_URI
 from app import app
 from extensions import db
 from collectors.file_collector import FileCollector
@@ -16,6 +17,9 @@ from services.event_service import ingest_events
 
 class EventIngestionPipelineTests(unittest.TestCase):
     def setUp(self):
+        self.assertIn('sentinelx-tests', app.config['SQLALCHEMY_DATABASE_URI'])
+        self.assertNotIn('backend\\sentinelx.db', app.config['SQLALCHEMY_DATABASE_URI'])
+        self.assertEqual(app.config['SQLALCHEMY_DATABASE_URI'], TEST_DATABASE_URI)
         self.app_context = app.app_context()
         self.app_context.push()
         db.drop_all()
